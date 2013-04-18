@@ -1,4 +1,3 @@
-(require-package 'web)
 (require 'web)
 
 (defconst *douban-fm-process-name* "Douban FM")
@@ -50,7 +49,7 @@
   (interactive)
   (process-send-string *douban-fm-process-name* "pause\n"))
 
-(defun douban-fm-play ()
+(defun douban-fm-play-next ()
   (interactive)
   (douban-play-song (douban-next-song)))
 
