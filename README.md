@@ -3,6 +3,7 @@
 This is a Douban FM client for Emacs
 
 * Require
+
 Emacs Verion >= 24
 
 * Usage:
