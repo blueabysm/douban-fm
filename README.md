@@ -4,9 +4,9 @@ This is a Douban FM client for Emacs
 
 ## Require
 
-Emacs Verion >= 24
-[emacs-web](https://github.com/nicferrier/emacs-web)
-[mplayer](http://www.mplayerhq.hu/design7/news.html)
+* Emacs Verion >= 24
+* [emacs-web](https://github.com/nicferrier/emacs-web)
+* [mplayer](http://www.mplayerhq.hu/design7/news.html)
 
 ## Usage:
 
