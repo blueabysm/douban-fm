@@ -23,8 +23,7 @@
 ;; get the first song of the list
 (defun douban-next-song ()
   (let ((song (pop douban-play-list)))
-    (if (>= 1 (length douban-play-list))
-        (douban-refresh-play-list))
+    (douban-refresh-play-list)
     (if (not (eq song nil))
         song)))
 
