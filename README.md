@@ -2,11 +2,11 @@
 
 This is a Douban FM client for Emacs
 
-* Require
+## Require
 
 Emacs Verion >= 24
 
-* Usage:
+## Usage:
 
 ```lisp
 (require 'douban-fm)
