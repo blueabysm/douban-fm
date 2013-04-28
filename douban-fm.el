@@ -1,13 +1,17 @@
 (require-package 'web)
 (require 'web)
+(require 'json)
 
 (defconst *douban-fm-process-name* "Douban FM")
-(defvar *url-douban-play-list* "http://douban.fm/j/mine/playlist?type=n&sid=&pt=0.0&channel=1000789&from=mainsite&r=add455f9e4")
+(defconst *douban-fm-protocol-domain* "http://douban.fm/j/explore")
+(defvar *douban-fm-play-list-url* "http://douban.fm/j/mine/playlist?type=n&sid=&pt=0.0&channel=1000789&from=mainsite&r=add455f9e4")
 (defvar *douban-fm-buffer-name* nil)
 (defvar *douban-fm-modeline-name* "Douban FM")
 (defvar *douban-fm-modeline-format* mode-line-format)
 (defvar *douban-fm-player-path* "mplayer")
+(defvar *douban-fm-channel-classes* '("hot_channels" "up_trending_channels"))
 
+(setq douban-play-list-url "http://douban.fm/j/mine/playlist?type=n&sid=&pt=0.0&channel=1000789&from=mainsite&r=add455f9e4")
 (setq douban-play-list)
 
 (defun douban-refresh-play-list ()
@@ -20,7 +24,7 @@
          (setq play-list-vector (cdr (assoc 'song json-object)))
          (loop for i across play-list-vector do
                (setq douban-play-list (cons i douban-play-list))))
-       :url *url-douban-play-list*)))
+       :url douban-play-list-url)))
 
 ;; get the first song of the list
 (defun douban-next-song ()
@@ -53,6 +57,23 @@
 (defun douban-auto-next-song (process event)
   (if (string= event "finished\n")
       (douban-play-song (douban-next-song))))
+
+(defun douban-channel-list (type start limit)
+  (let (url channel-list)
+    (if (member type *douban-fm-channel-classes*)
+        (progn
+          (setq url (concat *douban-fm-protocol-domain* "/" type "?start=" (number-to-string start) "&limit=" (number-to-string limit)))
+          (message "Loading channel list...")
+          (web-http-get
+           (lambda (con header data)
+             (setq json-object (json-read-from-string data))
+             (setq channel-list-vector (cdr (assoc 'channels (cdr (assoc 'data json-object)))))
+             (let ((douban-fm-popup-channel-list t))
+               (if (one-window-p) (split-window-sensibly (frame-selected-window)))
+               (other-window 1)
+               (loop for i across channel-list-vector do
+                     (insert i))))
+           :url url)))))
 
 (defun douban-fm-pause ()
   (interactive)
